@@ -34,9 +34,7 @@ socket.on('join_room_response',function(payload){
 	$('#messages').append('<p>New user joined the room: '+payload.username+'</p>');
 });
 
-console.log('hi');
 socket.on('send_message_response',function(payload){
-	console.log('hi2');
 	if(payload.result == 'fail'){
 		alert(payload.message);
 		return;
@@ -45,7 +43,6 @@ socket.on('send_message_response',function(payload){
 });
 
 function send_message(){
-	console.log('hi3');
 	var payload = {};
 	payload.room = chat_room;
 	payload.username = username;
