@@ -84,7 +84,7 @@ socket.on('join_room_response',function(payload){
 	var newHTML = '<p>'+payload.username+' just entered the lobby</p>'; 
 	var newNode = $(newHTML);
 	newNode.hide();
-	$('#messages').append(newNode);
+	$('#messages').prepend(newNode);
 	newNode.slideDown(1000);
 });
 
@@ -111,7 +111,7 @@ socket.on('player_disconnected',function(payload){
 	var newHTML = '<p>'+payload.username+' has left the lobby</p>'; 
 	var newNode = $(newHTML);
 	newNode.hide();
-	$('#messages').append(newNode);
+	$('#messages').prepend(newNode);
 	newNode.slideDown(1000);
 });
 
@@ -201,6 +201,7 @@ function send_message(){
 	payload.message = $('#send_message_holder').val();
 	console.log('*** Client Log Message : \'send_message\' payload' + JSON.stringify(payload));
 	socket.emit('send_message',payload);
+	payload.message = $('#send_message_holder').val('');
 }
 
 socket.on('send_message_response',function(payload){
@@ -211,7 +212,7 @@ socket.on('send_message_response',function(payload){
 	var newHTML = '<p><b>'+payload.username+' says:</b> '+payload.message+'</p>';
 	var newNode = $(newHTML);
 	newNode.hide();
-	$('#messages').append(newNode);
+	$('#messages').prepend(newNode);
 	newNode.slideDown(1000);
 });
 

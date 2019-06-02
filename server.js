@@ -592,7 +592,7 @@ io.sockets.on('connection',function(socket){
 		return;
 	}
 
-	var game_id = players[socket.id].username;
+	var game_id = players[socket.id].room;
 		if(('undefined' === typeof game_id) || !game_id){
 		var error_message = 'play_token can\'t find your game board';
 		log(error_message);
@@ -711,12 +711,58 @@ function send_game_update(socket, game_id, message){
 		//no game exists, so make one
 		console.log('No game exists. Creating '+game_id+ ' for '+socket.id);
 		games[game_id] = create_new_game();
-	};
-
+	}
 
 	//make sure that only 2 people are in the game room
+	var roomObject;
+	var numClients;
+	do{
+		roomObject = io.sockets.adapter.rooms[game_id];
+		numClients = roomObject.length;
+		if(numClients > 2){
+			console.log('Too many clients in room: '+game_id+' #: '+numClients);
+			if(games[game_id].player_white.socket == roomObject.sockets[0]){
+				games[game_id].player_white.socket = '';
+				games[game_id].player_white.username = '';
+			}
+			if(games[game_id].player_black.socket == roomObject.sockets[0]){
+				games[game_id].player_black.socket = '';
+				games[game_id].player_black.username = '';
+			}
+			//kick one of the extra people out
+			var sacrifice = Object.keys(roomObject.sockets)[0];
+			io.of('/').connected[sacrifice].leave(game_id);
+		}
+	}
+	
+	while((numClients-1)> 2);
 
 	//assign this socket a color
+	//if the current player isn't assigned a color
+	if((games[game_id].player_white.socket != socket.id) && (games[game_id].player_black.socket != socket.id)){
+		console.log('Player isn\'t assigned a color: '+socket.id);
+		//and there isn't a color to give them
+		if((games[game_id].player_black.socket != '') && (games[game_id].player_white.socket != '')){
+			games[game_id].player_white.socket != '';
+			games[game_id].player_black.socket != '';
+			games[game_id].player_white.username != '';
+			games[game_id].player_black.username != '';
+		}
+	}
+
+	//Assign colors to the players if not already done
+	if(games[game_id].player_white.socket == ''){
+		if(games[game_id].player_black.socket != socket.id){
+			games[game_id].player_white.socket = socket.id;
+			games[game_id].player_white.username = players[socket.id].username;
+		}
+	}
+	if(games[game_id].player_black.socket == ''){
+		if(games[game_id].player_white.socket != socket.id){
+			games[game_id].player_black.socket = socket.id;
+			games[game_id].player_black.username = players[socket.id].username;
+		}
+	}
 
 	//send game update
 	var success_data = {
