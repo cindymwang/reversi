@@ -640,6 +640,7 @@ io.sockets.on('connection',function(socket){
 		return;
 	}
 
+	//get the game state
 	var game = games[game_id];
 		if(('undefined' === typeof game) || !game){
 		var error_message = 'play_token couldn\'t find your game board';
@@ -652,6 +653,31 @@ io.sockets.on('connection',function(socket){
 		return;
 	}
 
+	//if the current attempt at playing a token is out of turn, then error
+	if(color !== game.whose_turn){
+		var error_message = 'play_token message played out of turn';
+		log(error_message);
+		socket.emit('play_token_response', 
+			{
+				result: 'fail',
+				message: error_message
+			});
+		return;
+	}
+
+	//if the wrong socket is playing the color
+	if(((game.whose_turn === 'white') && (game.player_white.socket != socket.id)) || ((game.whose_turn === 'black') && (game.player_black.socket != socket.id))){
+		var error_message = 'play_token turn played by wrong player';
+		log(error_message);
+		socket.emit('play_token_response', 
+			{
+				result: 'fail',
+				message: error_message
+			});
+		return;
+	}
+
+	//send response
 	var success_data = {
 		result: 'success',
 	};
@@ -690,7 +716,7 @@ function create_new_game(){
 
 	var d = new Date();
 	new_game.last_move_time = d.getTime();
-	new_game.whose_turn = 'white';
+	new_game.whose_turn = 'black';
 	new_game.board = [
 						[' ',' ',' ',' ',' ',' ',' ',' ',],
 						[' ',' ',' ',' ',' ',' ',' ',' ',],
