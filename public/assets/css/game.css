@@ -1,5 +1,9 @@
 body {
-background: green;
+background-color: #FFEEF4;
+}
+
+div {
+text-decoration-color: #858585;
 }
 
 table#game_board{
@@ -23,4 +27,39 @@ table#game_board td{
 td.hovered_over:hover {
 	background: url('../images/hover.gif');
 	background-size: 100% 100%;
+}
+
+.btn-info {
+    color: #fff;
+    background-color: #B390A4;
+    border-color: #B390A4;
+}
+
+.btn-secondary {
+    color: #fff;
+	background-color: #B390A4;
+    border-color: #B390A4;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #B390A4;
+    border-color: #B390A4;
+}
+
+#header-row {
+    background-color: #FFEEF4;
+    padding: 1em;
+}
+
+.form-inline {
+	padding-left: 1em;
+}
+
+.done {
+	margin-left: 1em;
+}
+
+#messages p {
+	margin-left: 1em;
 }
