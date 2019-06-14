@@ -63,3 +63,20 @@ td.hovered_over:hover {
 #messages p {
 	margin-left: 1em;
 }
+
+#header-row {
+	color: #B390A4;
+}
+
+h3 {
+	color: #B390A4;
+}
+
+p {
+	color: #B390A4;
+}
+
+.btn-success {
+    background-color: #935F7D;
+    border-color: #935F7D;
+}
