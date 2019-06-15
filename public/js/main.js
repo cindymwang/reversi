@@ -418,7 +418,8 @@ socket.on('game_over',function(payload){
 		return;
 	}
 	//8:28 vid 21
-	$('#game_over').html('<h1>Game Over</h1><h2>'+payload.who_won+' won!</h2>');
+	$('#game_over').html('<h1>Game Over</h1><h2>'+payload.who_won+' won!</h2>'+
+		'<div class="row"><div class="col"><img class="img-fluid" src="assets/images/clap.gif"/></div></div>');
 	$('#game_over').append('<a href="lobby.html?username='+username+'" class="btn btn-success btn-lg active" role="button" aria-pressed="true">Return to lobby</a>');
 
 });
